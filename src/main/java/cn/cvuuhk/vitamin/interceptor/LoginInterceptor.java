@@ -14,7 +14,7 @@ public class LoginInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     String uri = request.getRequestURI();
-    if (uri.equals("/login") || uri.equals("/logout")) return true;
+    if (uri.equals("/login")) return true;
 
     LoginVO vo = (LoginVO) request.getSession().getAttribute("login");
     if (vo == null) throw new NotLoginException();

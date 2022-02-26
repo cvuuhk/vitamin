@@ -1,5 +1,6 @@
 package cn.cvuuhk.vitamin.service;
 
+import cn.cvuuhk.vitamin.context.RequestContext;
 import cn.cvuuhk.vitamin.dao.UserRepository;
 import cn.cvuuhk.vitamin.entity.User;
 import cn.cvuuhk.vitamin.exception.LoginFailedException;
@@ -13,8 +14,14 @@ public class UserService {
   @Resource UserRepository repository;
 
   @Transactional
-  public User getUserById(String userId) {
-    return repository.findById(userId).get();
+  public User getUserById(String id) {
+    return repository.findById(id).get();
+  }
+
+  @Transactional
+  public User getCurrentUser() {
+    String id = RequestContext.getCurrentUserId();
+    return repository.findById(id).get();
   }
 
   @Transactional

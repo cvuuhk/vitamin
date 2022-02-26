@@ -2,7 +2,7 @@ package cn.cvuuhk.vitamin.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.sql.Timestamp;
 
 @Entity
 @Table(schema = "public", name = "selection")
@@ -17,7 +17,7 @@ public class Selection implements Serializable {
   private Integer score;
 
   @Column(name = "create_time", nullable = false)
-  private Instant createTime;
+  private Timestamp createTime;
 
   @ManyToOne
   @JoinColumn(name = "student_id", referencedColumnName = "id")
@@ -27,11 +27,11 @@ public class Selection implements Serializable {
   @JoinColumn(name = "course_id", referencedColumnName = "id")
   private Course course;
 
-  public Instant getCreateTime() {
+  public Timestamp getCreateTime() {
     return createTime;
   }
 
-  public Selection setCreateTime(Instant createTime) {
+  public Selection setCreateTime(Timestamp createTime) {
     this.createTime = createTime;
     return this;
   }

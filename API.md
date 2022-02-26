@@ -1,0 +1,29 @@
+# API
+
+- POST;/login 登录 001
+- POST;/logout 注销 002
+- GET;/course 获取所有课程简略信息 003
+- GET;/course/{id} 获取课程详细信息 004
+- GET;/status 获取系统状态（未开始选课、选课期间、选课结束、学期结束、归档）005
+  - 未开始：教师可以更改课程信息，学生无法选课
+  - 选课期间：教师无法更改课程信息，学生可以选课
+  - 选课结束：教师无法更改课程信息，学生无法选课
+  - 学期结束：教师仅可以更改分数信息，学生无法选课
+  - 归档：教师无法更改课程信息，学生无法选课
+- /student 1000
+  - GET;/info 获取学生信息 1001
+  - GET;/course/all 获取可选课程简略信息 1002
+  - GET;/course/selected 获取已选课程简略信息 1003
+  - POST;/course 选课 1004
+  - DELETE;/course/{id} 退课 1005
+  - GET;/score/{courseId} 查看成绩 1006
+- /teacher 2000
+  - GET;/info 获取教师信息 2001
+  - GET;/course 获取自己添加的所有课程简略信息 2002
+  - POST;/course 新建课程，更改课程信息 2003
+  - DELETE;/course/{id} 删除自己添加的课程 2003
+  - POST;/score 学生成绩评分 2005
+- /admin 3000
+  - GET;/info 获取管理员信息 3001
+  - POST;/status 更改系统状态 3002
+  - GET;/status 获取系统所有可能的状态 3003

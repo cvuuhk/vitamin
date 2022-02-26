@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.5
--- Dumped by pg_dump version 13.5
+-- Dumped from database version 13.6
+-- Dumped by pg_dump version 13.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -67,7 +67,7 @@ ALTER TABLE public.operation OWNER TO vitamin;
 
 CREATE TABLE public.role (
     id character varying NOT NULL,
-    comment character varying
+    name character varying
 );
 
 
@@ -99,6 +99,19 @@ CREATE TABLE public.selection (
 
 
 ALTER TABLE public.selection OWNER TO vitamin;
+
+--
+-- Name: status; Type: TABLE; Schema: public; Owner: vitamin
+--
+
+CREATE TABLE public.status (
+    id character varying NOT NULL,
+    name character varying NOT NULL,
+    comment character varying
+);
+
+
+ALTER TABLE public.status OWNER TO vitamin;
 
 --
 -- Name: student; Type: TABLE; Schema: public; Owner: vitamin
@@ -138,6 +151,18 @@ CREATE TABLE public."user" (
 ALTER TABLE public."user" OWNER TO vitamin;
 
 --
+-- Name: vitamin_system; Type: TABLE; Schema: public; Owner: vitamin
+--
+
+CREATE TABLE public.vitamin_system (
+    id character varying NOT NULL,
+    status_id character varying NOT NULL
+);
+
+
+ALTER TABLE public.vitamin_system OWNER TO vitamin;
+
+--
 -- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: vitamin
 --
 
@@ -152,6 +177,7 @@ a0000002	欧阳华灿
 --
 
 COPY public.course (id, name, teacher_id, total, remain) FROM stdin;
+c001	数据结构	t0000001	100	100
 \.
 
 
@@ -160,6 +186,24 @@ COPY public.course (id, name, teacher_id, total, remain) FROM stdin;
 --
 
 COPY public.operation (id, method, pattern, comment) FROM stdin;
+001	POST  	/login	登录
+002	POST  	/logout	注销
+003	GET   	/course	获取所有课程简略信息
+004	GET   	/status	获取系统状态
+1001	GET   	/student/info	获取学生信息
+1002	GET   	/student/course/all	获取可选课程简略信息
+1003	GET   	/student/selected	获取已选课程简略信息
+1005	DELETE	/student/course/{id}	退课
+1006	GET   	/student/score/{courseId}	查看成绩
+2001	GET   	/teacher/info	获取教师信息
+2002	GET   	/teacher/course	获取已添加课程简略信息
+2003	POST  	/teacher/course	维护课程信息
+2004	DELETE	/teacher/course/{id}	删除已添加课程
+2005	POST  	/student/score	学生成绩评分
+3001	GET   	/admin/info	获取管理员信息
+3003	GET   	/admin/status	获取系统所有可能的状态
+1004	POST  	/student/course	选课
+3002	POST  	/admin/status	更改系统状态
 \.
 
 
@@ -167,7 +211,7 @@ COPY public.operation (id, method, pattern, comment) FROM stdin;
 -- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: vitamin
 --
 
-COPY public.role (id, comment) FROM stdin;
+COPY public.role (id, name) FROM stdin;
 001	student
 002	teacher
 003	admin
@@ -179,6 +223,32 @@ COPY public.role (id, comment) FROM stdin;
 --
 
 COPY public.role_operation (role_id, operation_id) FROM stdin;
+001	001
+001	002
+001	003
+001	004
+001	1001
+001	1002
+001	1003
+001	1004
+001	1005
+001	1006
+002	001
+002	002
+002	003
+002	004
+002	2001
+002	2002
+002	2003
+002	2004
+002	2005
+003	001
+003	002
+003	003
+003	004
+003	3001
+003	3002
+003	3003
 \.
 
 
@@ -187,6 +257,19 @@ COPY public.role_operation (role_id, operation_id) FROM stdin;
 --
 
 COPY public.selection (id, student_id, course_id, score, create_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: status; Type: TABLE DATA; Schema: public; Owner: vitamin
+--
+
+COPY public.status (id, name, comment) FROM stdin;
+1	BEFORE_SELECTION	未开始：教师可以更改课程信息，学生无法选课
+2	SELECTING	选课期间：教师无法更改课程信息，学生可以选课
+3	AFTER_SELECTION	选课结束：教师无法更改课程信息，学生无法选课
+4	AFTER_TERM	学期结束：教师仅可以更改分数信息，学生无法选课
+5	ARCHIVE	归档：教师无法更改课程信息，学生无法选课
 \.
 
 
@@ -437,6 +520,15 @@ s0000024	s0000024	001
 
 
 --
+-- Data for Name: vitamin_system; Type: TABLE DATA; Schema: public; Owner: vitamin
+--
+
+COPY public.vitamin_system (id, status_id) FROM stdin;
+1	1
+\.
+
+
+--
 -- Name: admin admin_pk; Type: CONSTRAINT; Schema: public; Owner: vitamin
 --
 
@@ -469,11 +561,27 @@ ALTER TABLE ONLY public.selection
 
 
 --
+-- Name: status status_pk; Type: CONSTRAINT; Schema: public; Owner: vitamin
+--
+
+ALTER TABLE ONLY public.status
+    ADD CONSTRAINT status_pk PRIMARY KEY (id);
+
+
+--
 -- Name: student student_pk; Type: CONSTRAINT; Schema: public; Owner: vitamin
 --
 
 ALTER TABLE ONLY public.student
     ADD CONSTRAINT student_pk PRIMARY KEY (id);
+
+
+--
+-- Name: vitamin_system system_status_pk; Type: CONSTRAINT; Schema: public; Owner: vitamin
+--
+
+ALTER TABLE ONLY public.vitamin_system
+    ADD CONSTRAINT system_status_pk PRIMARY KEY (id);
 
 
 --
