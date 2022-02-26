@@ -1,7 +1,7 @@
 package cn.cvuuhk.vitamin.exception;
 
 public class StatusNotExistException extends RuntimeException {
-  public StatusNotExistException(String message) {
-    super(message);
+  public StatusNotExistException() {
+    super("该状态不存在");
   }
 }

@@ -1,10 +1,13 @@
 package cn.cvuuhk.vitamin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(schema = "public", name = "user")
+@JsonIgnoreProperties({"password"})
 public class User implements Serializable {
   private static final long serialVersionUID = 6786871439961636034L;
 

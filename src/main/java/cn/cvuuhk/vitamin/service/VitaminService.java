@@ -31,7 +31,7 @@ public class VitaminService {
     Status status =
         statusRepository
             .findById(statusId)
-            .orElseThrow(() -> new StatusNotExistException("该状态不存在"));
+            .orElseThrow(() -> new StatusNotExistException());
     VitaminSystem current = repository.findById("1").get();
     current.setStatus(status);
   }
